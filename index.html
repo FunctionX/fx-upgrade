@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>f(x)Core testnet upgrade countdown</title>
+    <meta http-equiv="refresh" content="60">
+    <title>f(x)Core upgrade countdown</title>
 </head>
 <style>
     .text-center {
@@ -104,7 +105,6 @@
 
 </style>
 
-
 <body>
 <div class="coin-title">
     <div class="container text-center">
@@ -134,7 +134,7 @@
             </div>
             <div class="col-sm-4 mb32"></div>
         </div>
-        <h1><strong>f(x)Core testnet</strong> upgrade v2.2.0 countdown
+        <h1><strong>f(x)Core</strong> upgrade v2.2.1 countdown
             <span id="block" style="color: rgb(220,5,5)"/>
         </h1>
     </div>
@@ -179,34 +179,30 @@
         return JSON.parse(xmlHttp.responseText).result;
     }
 
-    const fxUrl = "https://testnet-fx-json.functionx.io:26657"
-    const interval = 1000;
-    const upgradeBlockHeight = 3918000
+    const fxUrl = "https://fx-json.functionx.io:26657";
+    const upgradeBlockHeight = 5940000;
 
     function AverageBlockTime(block) {
         const nowHeight = Number(block.block.header.height);
         const nowTime = block.block.header.time;
-        const oldBlock = httpGetJson(fxUrl + "/block?height=" + (nowHeight - 100).toString());
+        const oldBlock = httpGetJson(fxUrl + "/block?height=" + (nowHeight - 1000).toString());
         const oldTime = oldBlock.block.header.time;
-        return (new Date(nowTime) - new Date(oldTime)) / 100;
+        const avgBlockTime = Math.round((new Date(nowTime) - new Date(oldTime)) / 1000);
+        console.log("AverageBlockTime", avgBlockTime);
+        return avgBlockTime;
     }
 
-    function ShowCountDown() {
-        const block = httpGetJson(fxUrl + "/block");
-        const avgBlockTime = AverageBlockTime(block);
-
-        let interval = upgradeBlockHeight - block.block.header.height;
-        if (interval < 0) {
+    function ShowCountDown(leftTime, intervalBlock) {
+        if (leftTime < 0) {
             return;
         }
-        document.getElementById("block").innerHTML = interval.toString();
+        document.getElementById("block").innerHTML = intervalBlock.toString();
 
-        let leftTime = interval * avgBlockTime;
-        let leftSecond = leftTime / 1000;
-        let days = Math.floor(leftSecond / (60 * 60 * 24));
-        let hour = Math.floor((leftSecond - days * 24 * 60 * 60) / 3600);
-        let minute = Math.floor((leftSecond - days * 24 * 60 * 60 - hour * 3600) / 60);
-        let second = Math.floor(leftSecond - days * 24 * 60 * 60 - hour * 3600 - minute * 60);
+        const leftSecond = leftTime / 1000;
+        const days = Math.floor(leftSecond / (60 * 60 * 24));
+        const hour = Math.floor((leftSecond - days * 24 * 60 * 60) / 3600);
+        const minute = Math.floor((leftSecond - days * 24 * 60 * 60 - hour * 3600) / 60);
+        const second = Math.floor(leftSecond - days * 24 * 60 * 60 - hour * 3600 - minute * 60);
 
         document.getElementById("days").innerHTML = days.toString();
         document.getElementById("hours").innerHTML = hour.toString();
@@ -214,8 +210,18 @@
         document.getElementById("seconds").innerHTML = second.toString();
     }
 
+    const intervalTimeout = 1000;
+    const block = httpGetJson(fxUrl + "/block");
+    const blockTime = new Date(block.block.header.time);
+    const avgBlockTime = AverageBlockTime(block);
+    const startBlockHeight = block.block.header.height;
+    let leftTime = (upgradeBlockHeight - startBlockHeight) * avgBlockTime
+    ShowCountDown(leftTime, upgradeBlockHeight-startBlockHeight);
+
     window.setInterval(function () {
-        ShowCountDown();
-    }, interval);
+        leftTime = leftTime - 1000
+        const curBlockHeight = startBlockHeight - Math.round(((new Date().getTime())-blockTime.getTime())/avgBlockTime)
+        ShowCountDown(leftTime, upgradeBlockHeight-curBlockHeight);
+    }, intervalTimeout);
 </script>
 </html>
