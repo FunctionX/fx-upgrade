@@ -4,106 +4,106 @@
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="60">
     <title>f(x)Core upgrade countdown</title>
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -16px;
+            margin-right: -16px;
+        }
+
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .mb32 {
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 60px;
+            font-weight: 700;
+            line-height: 1.17;
+            margin: 0px auto 80px;
+            max-width: 900px;
+        }
+
+        strong {
+            color: rgb(5, 82, 220);
+            font-weight: bold;
+        }
+
+        .coin-title {
+            margin-top: 80px;
+        }
+
+        .countdown {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .number {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px 0 rgb(35 35 35 / 16%);
+            display: inline-block;
+            height: 170px;
+            position: relative;
+            vertical-align: middle;
+            width: 170px;
+        }
+
+        .value {
+            font-size: 80px;
+            font-weight: 700;
+            line-height: .88;
+            margin-bottom: 16px;
+            padding-top: 32px;
+        }
+
+        .unit {
+            color: #959595;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .line {
+            background-image: linear-gradient(271deg, #148aff, #4dd5ff);
+            border-radius: 0 0 5px 5px;
+            bottom: 0;
+            height: 6px;
+            left: 0;
+            position: absolute;
+            width: 100%;
+        }
+
+        .colon {
+            color: #eee;
+            display: inline-block;
+            font-size: 60px;
+            font-weight: 700;
+            height: 170px;
+            padding-top: 32px;
+            text-align: center;
+            vertical-align: middle;
+            width: 30px;
+        }
+
+        .col-sm-4 {
+            flex-basis: 33.3333333333%;
+            max-width: 33.3333333333%;
+        }
+
+    </style>
 </head>
-<style>
-    .text-center {
-        text-align: center;
-    }
-
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -16px;
-        margin-right: -16px;
-    }
-
-    .container {
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-
-    .mb32 {
-        margin-bottom: 32px;
-    }
-
-    h1 {
-        font-size: 60px;
-        font-weight: 700;
-        line-height: 1.17;
-        margin: 0px auto 80px;
-        max-width: 900px;
-    }
-
-    strong {
-        color: rgb(5, 82, 220);
-        font-weight: bold;
-    }
-
-    .coin-title {
-        margin-top: 80px;
-    }
-
-    .countdown {
-        margin-bottom: 24px;
-        text-align: center;
-    }
-
-    .number {
-        background: #fff;
-        border-radius: 5px;
-        box-shadow: 0 4px 12px 0 rgb(35 35 35 / 16%);
-        display: inline-block;
-        height: 170px;
-        position: relative;
-        vertical-align: middle;
-        width: 170px;
-    }
-
-    .value {
-        font-size: 80px;
-        font-weight: 700;
-        line-height: .88;
-        margin-bottom: 16px;
-        padding-top: 32px;
-    }
-
-    .unit {
-        color: #959595;
-        font-size: 14px;
-        font-weight: 500;
-        text-transform: uppercase;
-    }
-
-    .line {
-        background-image: linear-gradient(271deg, #148aff, #4dd5ff);
-        border-radius: 0 0 5px 5px;
-        bottom: 0;
-        height: 6px;
-        left: 0;
-        position: absolute;
-        width: 100%;
-    }
-
-    .colon {
-        color: #eee;
-        display: inline-block;
-        font-size: 60px;
-        font-weight: 700;
-        height: 170px;
-        padding-top: 32px;
-        text-align: center;
-        vertical-align: middle;
-        width: 30px;
-    }
-
-    .col-sm-4 {
-        flex-basis: 33.3333333333%;
-        max-width: 33.3333333333%;
-    }
-
-</style>
 
 <body>
 <div class="coin-title">
@@ -170,7 +170,6 @@
         <div class="line"></div>
     </div>
 </div>
-</body>
 <script type="text/javascript">
     function httpGetJson(theUrl) {
         let xmlHttp = new XMLHttpRequest();
@@ -216,12 +215,13 @@
     const avgBlockTime = AverageBlockTime(block);
     const startBlockHeight = block.block.header.height;
     let leftTime = (upgradeBlockHeight - startBlockHeight) * avgBlockTime
-    ShowCountDown(leftTime, upgradeBlockHeight-startBlockHeight);
+    ShowCountDown(leftTime, upgradeBlockHeight - startBlockHeight);
 
     window.setInterval(function () {
         leftTime = leftTime - 1000
-        const curBlockHeight = startBlockHeight - Math.round(((new Date().getTime())-blockTime.getTime())/avgBlockTime)
-        ShowCountDown(leftTime, upgradeBlockHeight-curBlockHeight);
+        const curBlockHeight = startBlockHeight - Math.round(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
+        ShowCountDown(leftTime, upgradeBlockHeight - curBlockHeight);
     }, intervalTimeout);
 </script>
+</body>
 </html>
