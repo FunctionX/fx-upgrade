@@ -50,16 +50,6 @@
     // const fxUrl = "http://127.0.0.1:26657";
     const fxUrl = "https://fx-json.functionx.io:26657";
 
-    function getValidators() {
-        const result = httpGetJson(fxRestUrl + "/cosmos/staking/v1beta1/validators")
-        return result.validators
-    }
-
-    function getBlockSignatures() {
-        const result = httpGetJson(fxUrl + "/block")
-        return result.block.last_commit.signatures
-    }
-
     function getPeers() {
         const result = httpGetJson(fxUrl + "/net_info")
         return result.peers
