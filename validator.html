@@ -147,7 +147,6 @@
                 return str + ' too short';
             if (str.length > LIMIT)
                 return 'Exceeds length limit';
-            console.log(str)
             // don't allow mixed case
             const lowered = str.toLowerCase();
             const uppered = str.toUpperCase();
@@ -258,15 +257,15 @@
         validators.sort((val1, val2) => {
             const a = BigInt(val1.tokens)
             const b = BigInt(val2.tokens)
-            if (a < b) {
+            if (a > b) {
                 return -1;
             }
-            if (a > b) {
+            if (a < b) {
                 return 1;
             }
             return 0;
         }).forEach((validator, index) => {
-            const signature = blockSignatures[0]
+            const signature = blockSignatures[index]
             const signInfo = signInfos.find((sign) => {
                 const address = toHexString(fromWords(getLibraryFromEncoding('bech32').decode(sign.address).words))
                 return address === signature.validator_address
