@@ -213,7 +213,7 @@
     const block = httpGetJson(fxUrl + "/block");
     const blockTime = new Date(block.block.header.time);
     const avgBlockTime = AverageBlockTime(block);
-    const startBlockHeight = block.block.header.height;
+    const startBlockHeight = Number(block.block.header.height);
     let leftTime = (upgradeBlockHeight - startBlockHeight) * avgBlockTime
     ShowCountDown(leftTime, upgradeBlockHeight - startBlockHeight);
 
