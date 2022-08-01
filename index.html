@@ -192,7 +192,8 @@
     }
 
     function ShowCountDown(leftTime, intervalBlock) {
-        if (leftTime < 0) {
+        if (leftTime < 0 || intervalBlock < 0) {
+            window.open("https://explorer.functionx.io/")
             return;
         }
         document.getElementById("block").innerHTML = intervalBlock.toString();
@@ -219,7 +220,7 @@
 
     window.setInterval(function () {
         leftTime = leftTime - 1000
-        const curBlockHeight = startBlockHeight - Math.round(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
+        const curBlockHeight = startBlockHeight + Math.round(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
         ShowCountDown(leftTime, upgradeBlockHeight - curBlockHeight);
     }, intervalTimeout);
 </script>
