@@ -276,15 +276,21 @@
             } else if (signInfo?.missed_blocks_counter > 100) {
                 color = "text-danger"
             }
+            const tokens = Number(BigInt(validator.tokens) / BigInt(1e16))
+
+            let website = validator.description.website
+            if (website !== "" && !website.startsWith("http")) {
+                website = "https://" + website
+            }
 
             let para = document.createElement('tr');
             para.innerHTML = `
                 <th scope="row">${index + 1}</th>
-                <td><a target="_blank" href="${validator.description.website}">${validator.description.moniker}</a></td>
-                <td>${BigInt(validator.tokens) / BigInt(1e18)}FX</td>
-                <td>${validator.status} ${validator.jailed ? "(jailed)" : ""}</td>
-                <td>${validator.commission.commission_rates.rate * 100}%</td>
-                <td class="${color}">${signInfo?.missed_blocks_counter}</td>`
+                <td><a target="_blank" href="${website}">${validator.description.moniker}</a></td>
+                <td>${(tokens / 100).toFixed(2).toLocaleString()} FX</td>
+                <td>${validator.status === "BOND_STATUS_BONDED"? "✅":"❌"} ${validator.jailed ? "(jailed)" : ""}</td>
+                <td>${(validator.commission.commission_rates.rate * 100).toFixed(2)}%</td>
+                <td class="${color}"><a target="_blank" href="https://explorer.functionx.io/fxcore/validator/${validator.operator_address}">${signInfo?.missed_blocks_counter}<a></a></td>`
             signBody.appendChild(para)
         })
     }
