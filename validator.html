@@ -271,7 +271,7 @@
                 return address === signature?.validator_address
             })
             let color = "text-success"
-            if (signInfo?.missed_blocks_counter < 100) {
+            if (signInfo?.missed_blocks_counter > 10 && signInfo?.missed_blocks_counter < 100) {
                 color = "text-warning"
             } else if (signInfo?.missed_blocks_counter > 100) {
                 color = "text-danger"
