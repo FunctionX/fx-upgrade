@@ -268,8 +268,14 @@
             const signature = blockSignatures[index]
             const signInfo = signInfos.find((sign) => {
                 const address = toHexString(fromWords(getLibraryFromEncoding('bech32').decode(sign.address).words))
-                return address === signature.validator_address
+                return address === signature?.validator_address
             })
+            let color = ".text-success"
+            if (signInfo?.missed_blocks_counter < 100) {
+                color = ".text-warning"
+            } else if (signInfo?.missed_blocks_counter > 100) {
+                color = ".text-danger"
+            }
 
             let para = document.createElement('tr');
             para.innerHTML = `
@@ -278,7 +284,7 @@
                 <td>${BigInt(validator.tokens) / BigInt(1e18)}FX</td>
                 <td>${validator.status} ${validator.jailed ? "(jailed)" : ""}</td>
                 <td>${validator.commission.commission_rates.rate * 100}%</td>
-                <td>${signInfo.missed_blocks_counter}</td>`
+                <td class="${color}">${signInfo?.missed_blocks_counter}</td>`
             signBody.appendChild(para)
         })
     }
