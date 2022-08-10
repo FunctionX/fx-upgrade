@@ -123,12 +123,6 @@
 </div>
 <div class="countdown">
     <div class="number">
-        <div class="value">0</div>
-        <div class="unit">YEARS</div>
-        <div class="line"></div>
-    </div>
-    <div class="colon">:</div>
-    <div class="number">
         <div class="value" id="days">0</div>
         <div class="unit">DAYS</div>
         <div class="line"></div>
@@ -166,15 +160,18 @@
     function AverageBlockTime(block) {
         const nowHeight = Number(block.block.header.height);
         const nowTime = block.block.header.time;
-        const oldBlock = httpGetJson(fxUrl + "/block?height=" + (nowHeight - 1000).toString());
+        const oldBlock = httpGetJson(fxUrl + "/block?height=" + (nowHeight - 100).toString());
         const oldTime = oldBlock.block.header.time;
-        const avgBlockTime = Math.round((new Date(nowTime) - new Date(oldTime)) / 1000);
+        const avgBlockTime = Math.round((new Date(nowTime) - new Date(oldTime)) / 100);
         console.log("AverageBlockTime", avgBlockTime);
         return avgBlockTime;
     }
 
     function ShowCountDown(leftTime, intervalBlock) {
         if (leftTime < 0 || intervalBlock < 0) {
+            window.clearInterval(myInterval)
+            window.alert("The countdown has ended and the page will jump to the block browser.")
+            window.location.replace("https://explorer.functionx.io");
             return;
         }
         document.getElementById("block").innerHTML = intervalBlock.toString();
@@ -199,9 +196,9 @@
     let leftTime = (upgradeBlockHeight - startBlockHeight) * avgBlockTime
     ShowCountDown(leftTime, upgradeBlockHeight - startBlockHeight);
 
-    window.setInterval(function () {
+    const myInterval = window.setInterval(function () {
         leftTime = leftTime - 1000
-        const curBlockHeight = startBlockHeight + Math.round(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
+        const curBlockHeight = startBlockHeight + Math.ceil(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
         ShowCountDown(leftTime, upgradeBlockHeight - curBlockHeight);
     }, intervalTimeout);
 </script>
