@@ -146,26 +146,12 @@
         <div class="line"></div>
     </div>
 </div>
-<script type="text/javascript">
-    function httpGetJson(theUrl) {
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", theUrl, false); // false for synchronous request
-        xmlHttp.send(null);
-        return JSON.parse(xmlHttp.responseText).result;
-    }
 
-    const fxUrl = "https://fx-json.functionx.io:26657";
+<script src="src/js/index.js"></script>
+<script type="text/javascript">
     const upgradeBlockHeight = 5940000;
 
-    function AverageBlockTime(block) {
-        const nowHeight = Number(block.block.header.height);
-        const nowTime = block.block.header.time;
-        const oldBlock = httpGetJson(fxUrl + "/block?height=" + (nowHeight - 100).toString());
-        const oldTime = oldBlock.block.header.time;
-        const avgBlockTime = Math.round((new Date(nowTime) - new Date(oldTime)) / 100);
-        console.log("AverageBlockTime", avgBlockTime);
-        return avgBlockTime;
-    }
+    let myInterval
 
     function ShowCountDown(leftTime, intervalBlock) {
         if (leftTime < 0 || intervalBlock < 0) {
@@ -189,14 +175,14 @@
     }
 
     const intervalTimeout = 1000;
-    const block = httpGetJson(fxUrl + "/block");
+    const block = httpGetJson(getFxJsonrpcUrl() + "/block");
     const blockTime = new Date(block.block.header.time);
-    const avgBlockTime = AverageBlockTime(block);
+    const avgBlockTime = getAverageBlockTime(block);
     const startBlockHeight = Number(block.block.header.height);
     let leftTime = (upgradeBlockHeight - startBlockHeight) * avgBlockTime
     ShowCountDown(leftTime, upgradeBlockHeight - startBlockHeight);
 
-    const myInterval = window.setInterval(function () {
+    myInterval = window.setInterval(function () {
         leftTime = leftTime - 1000
         const curBlockHeight = startBlockHeight + Math.ceil(((new Date().getTime()) - blockTime.getTime()) / avgBlockTime)
         ShowCountDown(leftTime, upgradeBlockHeight - curBlockHeight);

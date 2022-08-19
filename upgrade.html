@@ -33,28 +33,8 @@
 </div>
 
 
+<script src="src/js/index.js"></script>
 <script type="text/javascript">
-    function httpGetJson(theUrl) {
-        let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", theUrl, false); // false for synchronous request
-        xmlHttp.send(null);
-        const response = JSON.parse(xmlHttp.responseText)
-        if (response.result) {
-            return response.result;
-        }
-        return response;
-    }
-
-    // const fxRestUrl = "http://127.0.0.1:1317";
-    const fxRestUrl = "https://fx-rest.functionx.io:1317";
-
-    // const fxUrl = "http://127.0.0.1:26657";
-    const fxUrl = "https://fx-json.functionx.io:26657";
-
-    function getPeers() {
-        const result = httpGetJson(fxUrl + "/net_info")
-        return result.peers
-    }
 
     function desensitization(ip) {
         const split = ip.split(".")
@@ -64,14 +44,19 @@
     let peers = []
     let lastLen = peers.length
 
+    const network = getQueryVariable("network")
+    let gitCommitHash = "5eef07630e89ad0bd786fb08fa0fb937e5c84d67"
+    if (network === "testnet") {
+        gitCommitHash = "b9a77ad70a46d73e4f9197d20bc100732ec7fb38"
+    }
+
     function updatePeers() {
         getPeers().forEach((peer) => {
             if (!peers.find(element => element.node_info.id === peer.node_info.id)) {
                 let isUpgrade = 0
-                if (peer.node_info.version.endsWith("5eef07630e89ad0bd786fb08fa0fb937e5c84d67")) {
+                if (peer.node_info.version.endsWith(gitCommitHash)) {
                     isUpgrade = 1
-                }
-                if (peer.node_info.version.endsWith("d5d54614f3227bb070e4a930c0ca95f0e31006a5")) {
+                } else if (peer.node_info.version.endsWith("d5d54614f3227bb070e4a930c0ca95f0e31006a5")) {
                     isUpgrade = 2
                 }
                 peer.isUpgrade = isUpgrade
@@ -80,7 +65,7 @@
         })
     }
 
-    for (let i =0; i < 5; i++) {
+    for (let i = 0; i < 5; i++) {
         updatePeers()
     }
 
@@ -114,7 +99,7 @@
                 <td>${peer.node_info.moniker}</td>
                 <td>${desensitization(peer.remote_ip)}</td>
                 <td>${peer.isUpgrade ? "✅" : "❌"}</td>
-                <td ><a target="_blank" href="https://github.com/FunctionX/fx-core/tree/${version}">${version === "d5d54614" ? "latest❇️" : version}</a></td>
+                <td ><a target="_blank" href="https://github.com/FunctionX/fx-core/tree/${version}">${version === gitCommitHash.substring(0, 8) ? "latest❇️" : version}</a></td>
                 <td>${peer.node_info.id.substring(0, 20)} *</td>`
             upgradeBody.appendChild(para)
         }
