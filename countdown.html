@@ -157,7 +157,12 @@
         if (leftTime < 0 || intervalBlock < 0) {
             window.clearInterval(myInterval)
             window.alert("The countdown has ended and the page will jump to the block browser.")
-            window.location.replace("https://explorer.functionx.io");
+            const network = getQueryVariable("network")
+            if (network === "testnet") {
+                window.location.replace("https://testnet-explorer.functionx.io");
+            } else {
+                window.location.replace("https://explorer.functionx.io");
+            }
             return;
         }
         document.getElementById("block").innerHTML = intervalBlock.toString();
