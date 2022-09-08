@@ -116,7 +116,7 @@
             </div>
             <div class="col-sm-4 mb32"></div>
         </div>
-        <h1><strong>f(x)Core</strong> upgrade v2.2.1 countdown
+        <h1><strong>f(x)Core</strong> upgrade v2.3.1 countdown
             <span id="block" style="color: rgb(220,5,5)"/>
         </h1>
     </div>
@@ -149,7 +149,11 @@
 
 <script src="src/js/index.js"></script>
 <script type="text/javascript">
-    const upgradeBlockHeight = 5940000;
+    const network = getQueryVariable("network")
+    let upgradeBlockHeight = 6807000;
+    if (network === "testnet") {
+        upgradeBlockHeight = 4714000
+    }
 
     let myInterval
 
@@ -157,7 +161,6 @@
         if (leftTime < 0 || intervalBlock < 0) {
             window.clearInterval(myInterval)
             window.alert("The countdown has ended and the page will jump to the block browser.")
-            const network = getQueryVariable("network")
             if (network === "testnet") {
                 window.location.replace("https://testnet-explorer.functionx.io");
             } else {
