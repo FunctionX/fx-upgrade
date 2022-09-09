@@ -74,3 +74,13 @@ function getPeers() {
     const result = httpGetJson(getFxJsonrpcUrl() + "/net_info")
     return result.peers
 }
+
+function getBalances(address) {
+    const result = httpGetJson(getFxRestUrl() + `/cosmos/bank/v1beta1/balances/${address}`)
+    return result.balances
+}
+
+function getMetadatas() {
+    const result = httpGetJson(getFxRestUrl() + `/cosmos/bank/v1beta1/denoms_metadata`)
+    return result.metadatas
+}
