@@ -45,9 +45,9 @@
     let lastLen = peers.length
 
     const network = getQueryVariable("network")
-    let gitCommitHash = "5eef07630e89ad0bd786fb08fa0fb937e5c84d67"
+    let gitCommitHash = "50a98ef23bffa392e4652518e8a5ae75343f3e1a"
     if (network === "testnet") {
-        gitCommitHash = "b9a77ad70a46d73e4f9197d20bc100732ec7fb38"
+        gitCommitHash = "50a98ef23bffa392e4652518e8a5ae75343f3e1a"
     }
 
     function updatePeers() {
@@ -56,7 +56,7 @@
                 let isUpgrade = 0
                 if (peer.node_info.version.endsWith(gitCommitHash)) {
                     isUpgrade = 1
-                } else if (peer.node_info.version.endsWith("d5d54614f3227bb070e4a930c0ca95f0e31006a5")) {
+                } else if (peer.node_info.version.endsWith("50a98ef23bffa392e4652518e8a5ae75343f3e1a")) {
                     isUpgrade = 2
                 }
                 peer.isUpgrade = isUpgrade
