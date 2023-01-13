@@ -51,7 +51,7 @@ function getAverageBlockTime(block) {
     const oldBlock = httpGetJson(getFxJsonrpcUrl() + "/block?height=" + (nowHeight - 100).toString());
     const oldTime = oldBlock.block.header.time;
     const avgBlockTime = Math.round((new Date(nowTime) - new Date(oldTime)) / 100);
-    console.log("average BlockTime", avgBlockTime);
+    console.log("Average BlockTime", avgBlockTime);
     return avgBlockTime;
 }
 

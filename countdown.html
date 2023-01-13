@@ -116,7 +116,7 @@
             </div>
             <div class="col-sm-4 mb32"></div>
         </div>
-        <h1><strong>f(x)Core</strong> upgrade v2.3.1 countdown
+        <h1><strong>f(x)Core</strong> upgrade v3.0.0 countdown
             <span id="block" style="color: rgb(220,5,5)"/>
         </h1>
     </div>
@@ -152,7 +152,7 @@
     const network = getQueryVariable("network")
     let upgradeBlockHeight = 6807000;
     if (network === "testnet") {
-        upgradeBlockHeight = 4714000
+        upgradeBlockHeight = 6578000
     }
 
     let myInterval
@@ -162,9 +162,9 @@
             window.clearInterval(myInterval)
             window.alert("The countdown has ended and the page will jump to the block browser.")
             if (network === "testnet") {
-                window.location.replace("https://testnet-explorer.functionx.io");
+                window.location.replace("https://testnet.starscan.io");
             } else {
-                window.location.replace("https://explorer.functionx.io");
+                window.location.replace("https://starscan.io");
             }
             return;
         }
