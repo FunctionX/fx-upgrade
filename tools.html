@@ -37,11 +37,13 @@
             for (let j = 0; j <metadatas.length; j++) {
                 if (balances[i].denom === metadatas[j].base ) {
                     balances[i].symbol = metadatas[j].symbol
+                    balances[i].exponent = 18
                 }
                 const aliases = metadatas[j].denom_units[0].aliases
                 for (let k = 0; k < aliases.length; k++) {
                     if (balances[i].denom === aliases[k]){
                         balances[i].symbol = metadatas[j].symbol
+                        balances[i].exponent = metadatas[j].denom_units[1].exponent
                     }
                 }
             }
@@ -55,11 +57,14 @@
     let balances = getErc20Balances()
     for (let i = 0; i < balances.length; i++) {
         let balance = balances[i]
+        let exponent = balance.exponent
+        let decimal = "1"+("0".repeat(exponent-2))
+        console.log(balance, decimal)
         let para = document.createElement('tr');
         para.innerHTML = `
                 <th scope="row">${i + 1}</th>
                 <td style="text-align: left">${balance.symbol}(${balance.denom})</td>
-                <td style="text-align: left">${(Number(BigInt(balance.amount) / BigInt(1e16))/100).toLocaleString()} FX</td>`
+                <td style="text-align: left">${(Number(BigInt(balance.amount) / BigInt(decimal))/100).toLocaleString()}</td>`
 
         signBody.appendChild(para)
     }
