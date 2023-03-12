@@ -55,6 +55,9 @@
     signBody.innerHTML = ''
 
     let balances = getErc20Balances()
+    balances.sort((a,b)=>{
+        return a.symbol.localeCompare(b.symbol)
+    })
     for (let i = 0; i < balances.length; i++) {
         let balance = balances[i]
         let exponent = balance.exponent
