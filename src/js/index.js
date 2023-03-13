@@ -80,6 +80,10 @@ function getBalances(address) {
     return result.balances
 }
 
+function getTotalSupply() {
+    const result = httpGetJson(getFxRestUrl() + `/cosmos/bank/v1beta1/supply`)
+    return result.supply
+}
 function getMetadatas() {
     const result = httpGetJson(getFxRestUrl() + `/cosmos/bank/v1beta1/denoms_metadata`)
     return result.metadatas
