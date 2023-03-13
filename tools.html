@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="text-center">
-    <h2>CurrentModule: <span id="currentModule">ERC20</span></h2>
+    <h2>CurrentModule: <span id="currentModule"></span></h2>
         <ul class="list-group">
             <li class="list-group-item"><a href="tools.html?module=total">Query Total</a></li>
             <li class="list-group-item"><a href="tools.html">Query ERC20</a></li>
@@ -82,6 +82,7 @@
     const signBody = document.getElementById("crosschain")
     signBody.innerHTML = ''
 
+    document.querySelector("#currentModule").innerHTML = module === "total" ? "TotalSupply" : "ERC20"
     let balances = getModuleBalances(module === "total" ? "" : moduleAddress)
     balances = balancesSymbol(balances);
     balances.sort((a, b) => {
