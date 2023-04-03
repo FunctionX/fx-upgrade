@@ -90,26 +90,26 @@
     for (let i = 0; i < balances.length; i++) {
         let balance = balances[i]
         let blockchain = "fxCore"
-        let bridgeAddr = ""
+        let bridgeURL = "https://starscan.io"
         if (balance.denom.startsWith("eth")) {
             blockchain = "Ethereum"
-            bridgeAddr="0x6f1D09Fed11115d65E1071CD2109eDb300D80A27"
+            bridgeURL = "https://etherscan.com/address/0x6f1D09Fed11115d65E1071CD2109eDb300D80A27"
         }
         if (balance.denom.startsWith("bsc")) {
             blockchain = "BSC"
-            bridgeAddr="0x84238c00c8313920826D798e3cF6793Ef4F610ad"
+            bridgeURL = "https://bscscan.com/address/0x84238c00c8313920826D798e3cF6793Ef4F610ad"
         }
         if (balance.denom.startsWith("polygon")) {
             blockchain = "Polygon"
-            bridgeAddr="0x4052eA614c5a96631C546d8B8d323a7C3D9ABb69"
+            bridgeURL = "https://polygonscan.com/address/0x4052eA614c5a96631C546d8B8d323a7C3D9ABb69"
         }
         if (balance.denom.startsWith("tron")) {
             blockchain = "Tron"
-            bridgeAddr="TKLDunqAynYcXRktcYHqncp3R6nJeEXLd5"
+            bridgeURL = "https://tronscan.org/#/contract/TKLDunqAynYcXRktcYHqncp3R6nJeEXLd5"
         }
         if (balance.denom.startsWith("avalanche")) {
             blockchain = "Avalanche"
-            bridgeAddr="0xDc3706d164d2D88b85ed702079ab331e2476D475"
+            bridgeURL = "https://snowtrace.io/address/0xDc3706d164d2D88b85ed702079ab331e2476D475"
         }
         if (balance.denom.startsWith("arbitrum")) {
             blockchain = "Arbitrum"
@@ -127,6 +127,7 @@
         let exponent = balance.exponent
         let decimal = "1" + ("0".repeat(exponent - 2))
         results = results.concat({
+            bridgeURL: bridgeURL,
             blockchain: blockchain,
             symbol: `${balance.symbol}(${balance.denom})`,
             amount: `${(Number(BigInt(balance.amount) / BigInt(decimal)) / 100).toLocaleString()}`,
@@ -139,7 +140,7 @@
         let para = document.createElement('tr');
         para.innerHTML = `
                 <th scope="row">${i + 1}</th>
-                <td style="text-align: left">${v.blockchain}</td>
+                <td style="text-align: left"><a href="${v.bridgeURL}">${v.blockchain}</a></td>
                 <td style="text-align: left">${v.symbol}</td>
                 <td style="text-align: left">${v.amount}</td>`
         signBody.appendChild(para)
