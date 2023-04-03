@@ -11,17 +11,18 @@
 <body>
 <div class="text-center">
     <h2>CurrentModule: <span id="currentModule"></span></h2>
-        <ul class="list-group">
-            <li class="list-group-item"><a href="tools.html?module=total">Query Total</a></li>
-            <li class="list-group-item"><a href="tools.html">Query ERC20</a></li>
-        </ul>
+    <ul class="list-group">
+        <li class="list-group-item"><a href="tools.html?module=total">Query Total</a></li>
+        <li class="list-group-item"><a href="tools.html">Query ERC20</a></li>
+    </ul>
     <div class="row">
         <table class="table table-striped table-hover">
             <thead>
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">BlockChain</th>
                 <th scope="col">Symbol</th>
-                <th scope="col">Balances</th>
+                <th scope="col">Balance</th>
             </tr>
             </thead>
             <tbody id="crosschain">
@@ -79,27 +80,70 @@
         return balances
     }
 
-    const signBody = document.getElementById("crosschain")
-    signBody.innerHTML = ''
-
     document.querySelector("#currentModule").innerHTML = module === "total" ? "TotalSupply" : "ERC20"
     let balances = getModuleBalances(module === "total" ? "" : moduleAddress)
     balances = balancesSymbol(balances);
     balances.sort((a, b) => {
         return a.symbol.localeCompare(b.symbol)
     })
+    let results = []
     for (let i = 0; i < balances.length; i++) {
         let balance = balances[i]
+        let blockchain = "fxCore"
+        let bridgeAddr = ""
+        if (balance.denom.startsWith("eth")) {
+            blockchain = "Ethereum"
+            bridgeAddr="0x6f1D09Fed11115d65E1071CD2109eDb300D80A27"
+        }
+        if (balance.denom.startsWith("bsc")) {
+            blockchain = "BSC"
+            bridgeAddr="0x84238c00c8313920826D798e3cF6793Ef4F610ad"
+        }
+        if (balance.denom.startsWith("polygon")) {
+            blockchain = "Polygon"
+            bridgeAddr="0x4052eA614c5a96631C546d8B8d323a7C3D9ABb69"
+        }
+        if (balance.denom.startsWith("tron")) {
+            blockchain = "Tron"
+            bridgeAddr="TKLDunqAynYcXRktcYHqncp3R6nJeEXLd5"
+        }
+        if (balance.denom.startsWith("avalanche")) {
+            blockchain = "Avalanche"
+            bridgeAddr="0xDc3706d164d2D88b85ed702079ab331e2476D475"
+        }
+        if (balance.denom.startsWith("arbitrum")) {
+            blockchain = "Arbitrum"
+        }
+        if (balance.denom.startsWith("optimism")) {
+            blockchain = "Optimism"
+        }
+        if (balance.denom.startsWith("ibc")) {
+            if (balance.symbol === "PURSE") {
+                blockchain = "PUNDIX"
+            } else {
+                blockchain = "UNKNOWN"
+            }
+        }
         let exponent = balance.exponent
         let decimal = "1" + ("0".repeat(exponent - 2))
+        results = results.concat({
+            blockchain: blockchain,
+            symbol: `${balance.symbol}(${balance.denom})`,
+            amount: `${(Number(BigInt(balance.amount) / BigInt(decimal)) / 100).toLocaleString()}`,
+        })
+    }
+    const signBody = document.getElementById("crosschain")
+    signBody.innerHTML = ''
+    results.sort((a, b) => (a.blockchain > b.blockchain) ? 1 : -1)
+    results.forEach((v, i) => {
         let para = document.createElement('tr');
         para.innerHTML = `
                 <th scope="row">${i + 1}</th>
-                <td style="text-align: left">${balance.symbol}(${balance.denom})</td>
-                <td style="text-align: left">${(Number(BigInt(balance.amount) / BigInt(decimal)) / 100).toLocaleString()}</td>`
-
+                <td style="text-align: left">${v.blockchain}</td>
+                <td style="text-align: left">${v.symbol}</td>
+                <td style="text-align: left">${v.amount}</td>`
         signBody.appendChild(para)
-    }
+    })
 </script>
 </body>
 </html>
